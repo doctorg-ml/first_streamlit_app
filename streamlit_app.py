@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import requests as req
 
 # Set title
 st.title('My Parents New Healthy Diner')
@@ -30,3 +31,7 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 
 # Display the selected fruit macros in a table on the page
 st.dataframe(fruits_to_show)
+
+# New Section to display fruityvice api response
+fruityvice_response = req.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response)
