@@ -67,9 +67,11 @@ try:
 
     my_cnx = snowflake.connector.connect(**snowflake_config)
     my_cur = my_cnx.cursor()
-    my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+    # my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+    my_cur.execute("SELECT * from fruit_load_list")
     my_data_row = my_cur.fetchone()
-    st.text("Hello from Snowflake:")
+    # st.text("Hello from Snowflake:")
+    st.text("The fruit load list contains:")
     st.text(my_data_row)
 
 except snowflake.connector.errors.ProgrammingError as e:
