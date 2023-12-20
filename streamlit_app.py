@@ -3,6 +3,14 @@ import pandas as pd
 import requests as req
 import snowflake.connector
 
+# Function to fetch data from Fruityvice API for a specific fruit
+def get_fruityvice_data(fruit_name):
+    fruityvice_response = req.get(f"https://fruityvice.com/api/fruit/{fruit_name}")
+    if fruityvice_response.status_code == 200:
+        return pd.json_normalize(fruityvice_response.json())
+    else:
+        return None
+
 # Set title
 st.title("My Parents' New Healthy Diner")
 
@@ -40,10 +48,9 @@ if new_fruit:
 # Display advice from Fruityvice API for a specific fruit
 st.header("Fruityvice Fruit Advice!")
 fruit_name = "kiwi"  # You can change this to fetch advice for the added fruit
-fruityvice_response = req.get(f"https://fruityvice.com/api/fruit/{fruit_name}")
-if fruityvice_response.status_code == 200:
-    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-    st.dataframe(fruityvice_normalized)
+fruityvice_data = get_fruityvice_data(fruit_name)
+if fruityvice_data is not None:
+    st.dataframe(fruityvice_data)
 else:
     st.error(f"Failed to fetch data for {fruit_name}. Please try again later.")
 
