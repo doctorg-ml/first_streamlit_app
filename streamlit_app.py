@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests as req
+import snowflake.connector
 
 # Set title
 st.title('My Parents\' New Healthy Diner')
@@ -52,3 +53,10 @@ if fruityvice_response.status_code == 200:
     st.dataframe(fruityvice_normalized)
 else:
     st.error(f"Failed to fetch data for {fruit_name}. Please try again later.")
+
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+my_cur = my_cnx.cursor()
+my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_data_row = my_cur.fetchone()
+streamlit.text("Hello from Snowflake:")
+streamlit.text(my_data_row)
