@@ -28,9 +28,18 @@ fruits_selected = st.multiselect("Pick some fruits:", list(my_fruit_list.index),
 fruits_to_show = my_fruit_list.loc[fruits_selected]
 st.dataframe(fruits_to_show)
 
+# Input field to add a new fruit
+new_fruit = st.text_input("Add a new fruit to the list:")
+if new_fruit:
+    my_fruit_list.loc[new_fruit] = 0  # Add the new fruit to the DataFrame
+
+    # Display updated fruit list
+    st.header('Updated Fruit List')
+    st.dataframe(my_fruit_list)
+
 # Display advice from Fruityvice API for a specific fruit
 st.header("Fruityvice Fruit Advice!")
-fruit_name = "kiwi"
+fruit_name = "kiwi"  # You can change this to fetch advice for the added fruit
 fruityvice_response = req.get(f"https://fruityvice.com/api/fruit/{fruit_name}")
 if fruityvice_response.status_code == 200:
     fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
