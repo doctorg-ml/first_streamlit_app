@@ -55,21 +55,12 @@ else:
     st.error(f"Failed to fetch data for {fruit_name}. Please try again later.")
 
 # Snowflake Connection
-try:
-    snowflake_connection = snowflake.connector.connect(
-        user=streamlit.secrets["snowflake"]["user"],
-        password=streamlit.secrets["snowflake"]["password"],
-        account=streamlit.secrets["snowflake"]["account"],
-        warehouse=streamlit.secrets["snowflake"]["warehouse"],
-        database=streamlit.secrets["snowflake"]["database"],
-        schema=streamlit.secrets["snowflake"]["schema"]
-    )
-
-    cursor = snowflake_connection.cursor()
-    cursor.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
-    data_row = cursor.fetchone()
-    st.text("Hello from Snowflake:")
-    st.text(data_row)
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+my_cur = my_cnx.cursor()
+my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_data_row = my_cur.fetchone()
+streamlit.text("Hello from Snowflake:")
+streamlit.text(my_data_row)
 
 except snowflake.connector.errors.ProgrammingError as e:
     st.error(f"Snowflake Error: {e}")
